@@ -1,0 +1,10 @@
+cd ~/trackmus/trackmus-api
+cat > .dockerignore << 'EOF'
+grafana-data/
+.git/
+.idea/
+*.log
+.DS_Store
+node_modules/
+.env
+EOF

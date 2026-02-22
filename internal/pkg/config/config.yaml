@@ -1,0 +1,45 @@
+log:
+  level: "debug"
+  file: "./logs/app.log"
+  loki_url: "${LOKI_URL}"
+  loki_labels:
+    app: "sportmates"
+    env: "local"
+
+http_server:
+  address: "0.0.0.0:8080"
+  timeout: 5s
+  idle_timeout: 60s
+
+postgres_conn_string: "${POSTGRES_CONN_STRING}"
+
+jwt:
+  secret: "${JWT_SECRET}"
+
+google_oauth:
+  client_id: "${GOOGLE_CLIENT_ID}"
+  client_secret: "${GOOGLE_CLIENT_SECRET}"
+  redirect_url: "${GOOGLE_REDIRECT_URL}"
+
+redis:
+  address: "${REDIS_ADDRESS}"
+  password: "${REDIS_PASSWORD}"
+  db: 0
+
+rabbitmq:
+  url: "${RABBITMQ_URL}"
+  queue_name: "${RABBITMQ_QUEUE}"
+
+smtp:
+  host: "${SMTP_HOST}"
+  port: "${SMTP_PORT}"
+  user: "${SMTP_USER}"
+  password: "${SMTP_PASSWORD}"
+  from_name: "${SMTP_FROM_NAME}"
+  from_address: "${SMTP_FROM_ADDRESS}"
+
+minio:
+  endpoint: "${MINIO_ENDPOINT}"
+  access_key: "${MINIO_ROOT_USER}"
+  secret_key: "${MINIO_ROOT_PASSWORD}"
+  use_ssl: ${MINIO_USE_SSL}
