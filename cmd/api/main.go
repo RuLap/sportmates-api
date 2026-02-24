@@ -5,6 +5,8 @@ import (
 	"time"
 
 	mail_services "github.com/RuLap/sportmates-api/internal/app/mail/services"
+	"github.com/RuLap/sportmates-api/internal/app/profile"
+	"github.com/RuLap/sportmates-api/internal/app/refdata"
 	"github.com/RuLap/sportmates-api/internal/app/user"
 	"github.com/RuLap/sportmates-api/internal/pkg/config"
 	"github.com/RuLap/sportmates-api/internal/pkg/http"
@@ -78,6 +80,8 @@ func main() {
 	//Modules----------------------------------------------------------------------------------------------------------
 
 	authModule := user.NewModule(logger, storage.Database(), jwtHelper, redisService, mqService)
+	refdataModule := refdata.NewModule(logger, storage.Database())
+	profileModule := profile.NewModule(logger, storage.Database(), minioService, refdataModule.Service)
 
 	var mailService *mail_services.MailService
 	if mqService != nil {
@@ -122,6 +126,14 @@ func main() {
 		})
 
 		r.With(middleware.AuthMiddleware(jwtHelper)).Post("/logout", authModule.Handler.Logout)
+	})
+
+	router.Route("/profiles", func(r chi.Router) {
+		r.Use(middleware.AuthMiddleware(jwtHelper))
+
+		r.Get("/{id}", profileModule.Handler.GetUserByID)
+		r.Get("/avatar/upload-url", profileModule.Handler.GetAvatarUploadURL)
+		r.Post("/avatar", profileModule.Handler.ConfirmAvatarUpload)
 	})
 
 	//Server-----------------------------------------------------------------------------------------------------------
